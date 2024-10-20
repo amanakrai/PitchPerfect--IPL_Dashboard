@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.clip-pie {
+    clip-path: inset(50% 50% 50% 50%);
+}

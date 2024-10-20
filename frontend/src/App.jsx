@@ -1,78 +1,66 @@
-import NavBar from './components/NavBar'
-import Match from './components/Match';
-import './App.css'
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
+import NavBar from "./components/NavBar";
+import Match from "./components/Match";
+import "./App.css";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 function App() {
-  const [demo, setDemo] = useState("2");
-//   const [apiData, setApiData] = useState([
-//     {
-//     id: "",
-//     season: "", 
-//     city: "", 
-//     date: "", 
-//     match_type: "",
-//     player_of_match: "",
-//     venue: "", 
-//     team1: "", 
-//     team2: "", 
-//     toss_winner: "",
-//     toss_decision: "", 
-//     winner: "",
-//     result: "", 
-//     result_margin: "",
-//     target_runs: "",
-//     target_overs: "", 
-//     super_over: "", 
-//     method: "",
-//     umpire1: "", 
-//     umpire2: ""
-//   }
-// ]);
+  const [year, setYear] = useState("2024");
+
+  const handleYearChange = (value) => {
+    console.log("YEAR", value);
+    setYear(value);
+  };
 
   const [apiData, setApiData] = useState();
 
-
   useEffect(() => {
-
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/match/2021');
-        console.log(response.data);
-        setApiData(()=>
-        
-          response.data
-        
+        const response = await axios.get(
+          "http://localhost:8080/api/match/" + year
         );
+        console.log(response.data);
+        setApiData(() => response.data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-
-  },[])
+  }, [year]);
 
   return (
     <>
-    <NavBar></NavBar>
+      <div className="flex flex-col ">
+        <div>
+          <NavBar handleYear={handleYearChange}></NavBar>
+        </div>
+        <div className="grid grid-cols-12 bg-scroll ">
+              {/* style={{backgroundImage: `url("/teamLogos/IPL.png")`}} */}
+          <div className="col-span-1"></div>
+          <div className="col-span-10">
+            {apiData &&
+              apiData.map((item) => (
+                <>
+                  <Match key={item.id} data={item}></Match>
+                </>
+              ))}
 
-    <div className=''>
-    {apiData && apiData.map(item => (
-      <>
-        <Match key={item.id} data={item}></Match>
-        <br/>
-      </>
-      ))}
-
-    {!apiData && <p>Loading...</p>}
-
-    </div>
-      
+            {!apiData && (
+              <div className="" disabled>
+                <svg
+                  className="animate-spin h-5 w-5 mr-3 ..."
+                  viewBox="0 0 24 24"
+                ></svg>
+                Loading...
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

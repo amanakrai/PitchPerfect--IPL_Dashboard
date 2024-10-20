@@ -10,28 +10,34 @@ const Match = ({ data }) => {
   let map = {};
   map["Chennai Super Kings"] = "/teamLogos/CSK.png";
   map["Rajasthan Royals"] = "/teamLogos/RR.png";
-  map["Kings XI Punjab"] = "/teamLogos/PK.png";
+  map["Kings XI Punjab"] = "/teamLogos/K11P.png";
   map["Punjab Kings"] = "/teamLogos/PK.png";
   map["Delhi Daredevils"] = "/teamLogos/DC.png";
   map["Royal Challengers Bangalore"] = "/teamLogos/RCB.png";
   map["Mumbai Indians"] = "/teamLogos/MI.png";
-  map["Deccan Chargers"] = "/teamLogos/DC.png";
+  map["Deccan Chargers"] = "/teamLogos/DEC.png";
   map["Gujarat Titans"] = "/teamLogos/GT.png";
+  map["Gujarat Lions"] = "/teamLogos/GL.png";
   map["Lucknow Super Giants"] = "/teamLogos/LSG.png";
   map["Sunrisers Hyderabad"] = "/teamLogos/SRH.png";
   map["Pune Warriors"] = "/teamLogos/PW.png";
+  map["Rising Pune Supergiants"] = "/teamLogos/RPS.png";
+  map["Rising Pune Supergiant"] = "/teamLogos/RPS.png";
   map["Delhi Capitals"] = "/teamLogos/DC.png";
   map["Kolkata Knight Riders"] = "/teamLogos/KKR.png";
+  map["Royal Challengers Bengaluru"] = "/teamLogos/RCB.png";
 
   return (
     <>
     <div className="">
+
+      
       <div
         onClick={toggleModal}
-        className="mt-[20px] ml-[410px] mr-[350px]  border rounded-lg  max-w-xxl transition duration-300 ease-in-out hover:scale-95  p-2"
+        className="mt-[20px]  border rounded-lg bg-white border-black max-w-xxl transition duration-300 ease-in-out hover:scale-95  p-2"
       >
         <h1 className=" text-center m-[-5px] font-bold">{data.match_type}</h1>
-        <div className=" grid grid-cols-3 gap-[220px]">
+        <div className=" grid grid-cols-3 gap-[490px]">
           <img
             className="object-scale-down h-20 w-20 max-w-xs "
             src={map[data.team1]}
