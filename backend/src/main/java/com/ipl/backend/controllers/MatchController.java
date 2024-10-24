@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import com.ipl.backend.dto.TeamStats;
 
 
 
@@ -46,20 +48,35 @@ public class MatchController {
     }
 
     @GetMapping("/match/{teamName}/{year}")
-    public ResponseEntity<HashMap<List<Match>, TeamStats>> getMethodName(@PathVariable String teamName, @PathVariable String year) {
+    public ResponseEntity<List<Match>> getMethodName(@PathVariable String teamName, @PathVariable String year) {
        
-        HashMap<List<Match>, TeamStats> TeamSeasonStatsMap = new HashMap<>();
+        // HashMap<List<Match>, TeamStats> TeamSeasonStatsMap = new HashMap<>();
+       List<Match> MatchList = new ArrayList<>();
 
         try {
-            TeamSeasonStatsMap = matchService.getMatchesOfTeamByYear(teamName,year);
+            MatchList = matchService.getMatchesOfTeamByYear(teamName,year);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return new ResponseEntity<HashMap<List<Match>, TeamStats>>(TeamSeasonStatsMap, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<Match>>(MatchList, HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<HashMap<List<Match>, TeamStats>>(TeamSeasonStatsMap, HttpStatus.OK);
+        return new ResponseEntity<List<Match>>(MatchList, HttpStatus.OK);
 
     }
+
+    @GetMapping("/match/strats/{teamName}/{year}")
+    public ResponseEntity<TeamStats> getTeamStratByYear(@PathVariable String teamName, @PathVariable String year) {
+        TeamStats teamStats = new TeamStats();
+        try {
+            teamStats = matchService.getTeamStratsByYear(teamName, year);
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<TeamStats>(teamStats, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<TeamStats>(teamStats, HttpStatus.OK);
+
+    }
+    
     
 
 }

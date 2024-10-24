@@ -12,5 +12,7 @@ public class TeamStats {
     private Float tossWinPct;
     private Float batFirstWinPct;
     private Float fieldFirstPct;
+    private Float batFirstWin;
+    private Float fieldFirstWin;
 
 }

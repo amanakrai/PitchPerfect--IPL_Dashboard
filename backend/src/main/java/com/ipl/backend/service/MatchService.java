@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import com.ipl.backend.dto.TeamStats;
 import com.ipl.backend.model.Match;
 import com.ipl.backend.repoDAO.MatchDAO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class MatchService {
@@ -31,12 +33,22 @@ public class MatchService {
 
     }
 
-    public HashMap<List<Match>, TeamStats> getMatchesOfTeamByYear(String teamName, String year) {
+    public List<Match> getMatchesOfTeamByYear(String teamName, String year) throws JsonProcessingException {
 
         List<Match> matches = new ArrayList<>();
-        TeamStats stats = new TeamStats();
-        HashMap<List<Match>, TeamStats> TeamSeasonStatsMap = new HashMap<>();
+       
+        matches = matchDAO.getTeamMatchesByYear(teamName, year);
+        
+        return matches;
+    }
 
+    public TeamStats getTeamStratsByYear (String teamName, String year) throws JsonProcessingException{
+        
+        List<Match> matches = new ArrayList<>();
+        HashMap<String, String> teamStratsPerYear = new HashMap<>();
+
+        TeamStats teamStats = new TeamStats();
+        
         matches = matchDAO.getTeamMatchesByYear(teamName, year);
 
         Float totalMatches = Float.valueOf(matches.size());
@@ -57,24 +69,30 @@ public class MatchService {
         Float fieldFirst = Float.valueOf(matches.stream().filter(m -> m.getTeam2().equals(teamName)).count());
         Float fieldFirstAndWon = Float.valueOf(matches.stream().filter(m -> m.getTeam2().equals(teamName))
                 .filter(m -> m.getWinner().equals(teamName)).count());
+                
+        System.out.println("FeildFirstAndWon"+fieldFirstAndWon);
+        // teamStratsPerYear.put("teamName", teamName);
+        // teamStratsPerYear.put("totalMatches",String.valueOf(totalMatches));
+        // teamStratsPerYear.put("totalWins", String.valueOf(totalWins));
+        // teamStratsPerYear.put("winPerc", String.valueOf((totalWins / totalMatches) * 100));
+        // teamStratsPerYear.put("tossWinPerc", String.valueOf((tossWins / totalMatches) * 100));
+        // teamStratsPerYear.put("BatFirstWinPerc", String.valueOf((batFirstAndWon / batFirst) * 100));
+        // teamStratsPerYear.put("FieldFirstWinPerc", String.valueOf((fieldFirstAndWon / fieldFirst) * 100));
 
-        stats.setTeamName(teamName);
-        stats.setTotalMatches(totalMatches);
-        stats.setTotalWins(totalWins);
-        stats.setWinPct((totalWins / totalMatches) * 100);
-        stats.setTossWinPct((tossWins / totalMatches) * 100);
-        stats.setBatFirstWinPct((batFirstAndWon / batFirst) * 100);
-        stats.setFieldFirstPct((fieldFirstAndWon / fieldFirst) * 100);
-
-        TeamSeasonStatsMap.put(matches, stats);
-
-        // System.out.println("Win Percentage of : " + teamName + "is " + (totalWins / totalMatches) * 100);
-        // System.out.println("Toss Win Percentage of : " + teamName + "is " + (tossWins / totalMatches) * 100);
-        // System.out.println("Bat First Win Percentage of : " + teamName + "is " + (batFirstAndWon / batFirst) * 100);
-        // System.out.println("Field First Win Percentage of : " + teamName + "is " + (fieldFirstAndWon / fieldFirst) * 100);
-        System.out.println(TeamSeasonStatsMap.toString());
-
-        return TeamSeasonStatsMap;
+        teamStats.setTeamName(teamName);
+        teamStats.setWinPct((totalWins / totalMatches) * 100);
+        teamStats.setBatFirstWinPct((batFirstAndWon / batFirst) * 100);
+        teamStats.setFieldFirstPct((fieldFirstAndWon / fieldFirst) * 100);
+        teamStats.setTossWinPct(tossWins);
+        teamStats.setTotalMatches(totalMatches);
+        teamStats.setTotalWins(totalWins);
+        teamStats.setBatFirstWin(batFirstAndWon);
+        teamStats.setFieldFirstWin(fieldFirstAndWon);
+    
+        // ObjectMapper objectMapper = new ObjectMapper();
+        // String jsonStratString = objectMapper.writeValueAsString(teamStratsPerYear);
+        
+        return teamStats;
     }
 
 }

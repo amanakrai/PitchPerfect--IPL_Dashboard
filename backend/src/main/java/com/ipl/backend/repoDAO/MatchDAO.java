@@ -19,4 +19,6 @@ public interface MatchDAO extends JpaRepository<Match,Long> {
     @Query("select m from Match m where (m.team1 = :teamName or m.team2 = :teamName) and Year(m.date) = :year  order by m.date desc")
     List<Match> getTeamMatchesByYear(@Param("teamName") String teamName, @Param("year") String year);
 
+    @Query("select m from Match m where (m.team1 = :teamName or m.team2 = :teamName) and Year(m.date) = :year  order by m.date desc")
+    List<Match> getTeamStratsByYear(@Param("teamName") String teamName, @Param("year") String year);
 }
